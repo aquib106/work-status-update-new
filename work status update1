@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work Status Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 font-sans">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6 text-center">🔍 Work Status Tracker</h1>
+
+    <!-- Filter -->
+    <div class="mb-4">
+      <label for="statusFilter" class="font-medium">Filter by status:</label>
+      <select id="statusFilter" class="ml-2 px-3 py-1 rounded border">
+        <option value="all">All</option>
+        <option value="pending">Pending</option>
+        <option value="in-progress">In Progress</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+
+    <!-- Task List -->
+    <div id="taskList" class="space-y-4">
+      <!-- Tasks inserted dynamically -->
+    </div>
+  </div>
+
+  <script>
+    const tasks = [
+      { title: "Order raw materials", status: "pending" },
+      { title: "Site inspection", status: "in-progress" },
+      { title: "Submit invoice to client", status: "completed" },
+      { title: "Schedule transport", status: "pending" },
+    ];
+
+    const statusColors = {
+      "pending": "bg-yellow-200 text-yellow-800",
+      "in-progress": "bg-blue-200 text-blue-800",
+      "completed": "bg-green-200 text-green-800",
+    };
+
+    function renderTasks(filter = 'all') {
+      const container = document.getElementById("taskList");
+      container.innerHTML = "";
+      
+      tasks.filter(task => filter === 'all' || task.status === filter).forEach(task => {
+        const taskDiv = document.createElement("div");
+        taskDiv.className = "flex justify-between items-center bg-white p-4 rounded shadow";
+
+        const statusClass = statusColors[task.status];
+        taskDiv.innerHTML = `
+          <span>${task.title}</span>
+          <span class="text-sm px-3 py-1 rounded ${statusClass}">${task.status.replace('-', ' ')}</span>
+        `;
+
+        container.appendChild(taskDiv);
+      });
+    }
+
+    document.getElementById("statusFilter").addEventListener("change", function() {
+      renderTasks(this.value);
+    });
+
+    renderTasks();
+  </script>
+</body>
+</html>
